@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "kien1211",
+    "database": "survey_platform",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "form_builder_db_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "form_builder_db_prod",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
