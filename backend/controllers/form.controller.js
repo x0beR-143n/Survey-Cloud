@@ -8,6 +8,27 @@ const Answer = db.Answer;
 const { Op } = require('sequelize');
 
 // Create a new form with questions and options
+/*
+{
+  "form": {
+    "id": "abc123",
+    "title": "Khảo sát sản phẩm",
+    "description": "Hãy giúp chúng tôi hiểu bạn hơn"
+  },
+  "questions": [
+    {
+      "question_text": "Bạn thích sản phẩm nào?",
+      "question_type": "radio",
+      "options": ["A", "B", "C"]
+    },
+    {
+      "question_text": "Bạn thích màu gì?",
+      "question_type": "checkbox",
+      "options": ["Đỏ", "Xanh", "Vàng"]
+    }
+  ]
+}
+*/
 exports.createForm = async (req, res) => {
   const t = await db.sequelize.transaction();
   
@@ -59,9 +80,50 @@ exports.createForm = async (req, res) => {
 };
 
 // Get form details by ID with questions and options
+/* 
+{
+  "form": {
+    "id": "abc123",
+    "title": "Khảo sát sản phẩm",
+    "description": "Hãy giúp chúng tôi hiểu bạn hơn",
+    "created_at": "2025-05-16T10:00:00Z"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "form_id": "abc123",
+      "question_text": "Bạn thích sản phẩm nào?",
+      "question_type": "radio",
+      "options": [
+        { "id": 101, "question_id": 1, "option_text": "Sản phẩm A" },
+        { "id": 102, "question_id": 1, "option_text": "Sản phẩm B" },
+        { "id": 103, "question_id": 1, "option_text": "Sản phẩm C" }
+      ]
+    },
+    {
+      "id": 2,
+      "form_id": "abc123",
+      "question_text": "Bạn thích màu gì?",
+      "question_type": "checkbox",
+      "options": [
+        { "id": 201, "question_id": 2, "option_text": "Đỏ" },
+        { "id": 202, "question_id": 2, "option_text": "Xanh" },
+        { "id": 203, "question_id": 2, "option_text": "Vàng" }
+      ]
+    },
+    {
+      "id": 3,
+      "form_id": "abc123",
+      "question_text": "Bạn có nhận xét gì về sản phẩm?",
+      "question_type": "text",
+      "options": []
+    }
+  ]
+}
+*/
 exports.getFormDetailsById = async (req, res) => {
   try {
-    const formId = req.query.id;
+    const formId = req.params.id;
     
     if (!formId) {
       return res.status(400).send({
@@ -166,7 +228,7 @@ exports.submitForm = async (req, res) => {
 // Get form result by ID
 exports.getFormResultById = async (req, res) => {
   try {
-    const formId = req.query.id;
+    const formId = req.params.id;
     
     if (!formId) {
       return res.status(400).send({
