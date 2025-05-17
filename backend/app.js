@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 const db = require("./models");
-const userRoutes = require("./routes/user.routes");
+const formRoutes = require("./routes/form.routes");
 const cors = require("cors");
 
 app.use(express.json());
 app.use(cors());
 
-// Route
-app.use("/users", userRoutes);
+// Routes
+app.use("/forms", formRoutes); // Thêm route mới cho forms
 
 // DB Sync
 db.sequelize.sync().then(() => {
