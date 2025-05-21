@@ -15,7 +15,7 @@ db.sequelize.sync().then(() => {
   console.log("Synced with MySQL DB");
 });
 
-const PORT = 3000;
+const PORT = 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
