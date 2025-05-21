@@ -1,0 +1,20 @@
+# Base image dùng để chạy Node.js
+FROM node:20
+
+# Tạo thư mục làm việc trong container
+WORKDIR /app
+
+# Copy file package.json và package-lock.json (nếu có)
+COPY package*.json ./
+
+# Cài đặt dependencies
+RUN npm install
+
+# Copy toàn bộ mã nguồn vào container
+COPY . .
+
+# Expose cổng mà ứng dụng sử dụng (thường Express dùng 3000 hoặc 8080, tùy bạn)
+EXPOSE 8080
+
+# Lệnh khởi chạy ứng dụng
+CMD ["node", "app.js"]
