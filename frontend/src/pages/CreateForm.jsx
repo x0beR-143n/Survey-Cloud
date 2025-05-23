@@ -137,63 +137,72 @@ const handleSubmit = async () => {
 
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded shadow-md">
-      <h1 className="text-3xl font-bold mb-6 text-center">Tạo Form Mới</h1>
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800">
+        Tạo Form Mới
+      </h1>
 
-      <div className="mb-5">
-        <label className="block mb-1 font-semibold">Tên Form</label>
+      <div className="mb-6">
+        <label htmlFor="formTitle" className="block mb-2 font-semibold text-gray-700">
+          Tên Form <span className="text-red-500">*</span>
+        </label>
         <input
-          className="w-full border border-gray-300 rounded px-3 py-2"
+          id="formTitle"
           type="text"
           value={formTitle}
           onChange={(e) => setFormTitle(e.target.value)}
           placeholder="Nhập tên form"
+          className="w-full border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
       </div>
 
-      <div className="mb-5">
-        <label className="block mb-1 font-semibold">Mô tả</label>
+      <div className="mb-8">
+        <label htmlFor="formDescription" className="block mb-2 font-semibold text-gray-700">
+          Mô tả
+        </label>
         <textarea
-          className="w-full border border-gray-300 rounded px-3 py-2"
+          id="formDescription"
           value={formDescription}
           onChange={(e) => setFormDescription(e.target.value)}
           placeholder="Nhập mô tả form"
-          rows={3}
+          rows={4}
+          className="w-full border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
       </div>
 
-      <h2 className="text-2xl font-semibold mt-8 mb-4">Câu hỏi</h2>
+      <h2 className="text-3xl font-semibold mb-6 text-gray-800">Câu hỏi</h2>
 
       {questions.map((q, idx) => (
         <div
           key={idx}
-          className="mb-6 border border-gray-300 rounded p-4 bg-gray-50"
+          className="mb-8 border border-gray-300 rounded-lg p-6 bg-gray-50 shadow-sm relative"
         >
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-semibold">Câu hỏi {idx + 1}</h3>
-            <button
-              onClick={() => removeQuestion(idx)}
-              className="text-red-500 font-bold text-xl"
-              title="Xóa câu hỏi"
-            >
-              &times;
-            </button>
-          </div>
+          <button
+            onClick={() => removeQuestion(idx)}
+            title="Xóa câu hỏi"
+            className="absolute top-4 right-4 text-red-600 hover:text-red-800 transition text-2xl font-bold focus:outline-none"
+          >
+            &times;
+          </button>
 
+          <label className="block mb-3 font-semibold text-gray-700" htmlFor={`question_text_${idx}`}>
+            Câu hỏi {idx + 1} <span className="text-red-500">*</span>
+          </label>
           <input
-            className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+            id={`question_text_${idx}`}
             type="text"
-            placeholder="Nội dung câu hỏi"
+            placeholder="Nhập nội dung câu hỏi"
             value={q.question_text}
-            onChange={(e) =>
-              updateQuestion(idx, "question_text", e.target.value)
-            }
+            onChange={(e) => updateQuestion(idx, "question_text", e.target.value)}
+            className="w-full border border-gray-300 rounded-md px-4 py-3 mb-5 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
 
-          <div className="flex items-center space-x-3 mb-3">
-            <label className="font-medium">Loại:</label>
+          <div className="flex items-center mb-5 space-x-4">
+            <label htmlFor={`question_type_${idx}`} className="font-semibold text-gray-700">
+              Loại câu hỏi:
+            </label>
             <select
-              className="border border-gray-300 rounded px-3 py-1"
+              id={`question_type_${idx}`}
               value={q.question_type}
               onChange={(e) => {
                 const type = e.target.value;
@@ -204,6 +213,7 @@ const handleSubmit = async () => {
                   updateQuestion(idx, "options", []);
                 }
               }}
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             >
               <option value="text">Text</option>
               <option value="radio">Radio</option>
@@ -214,31 +224,37 @@ const handleSubmit = async () => {
           </div>
 
           {questionTypesWithOptions.includes(q.question_type) && (
-            <div className="mb-3">
-              <label className="font-medium mb-1 block">Lựa chọn:</label>
+            <div>
+              <label className="block mb-3 font-semibold text-gray-700">
+                Lựa chọn
+              </label>
               {q.options.map((opt, i) => (
-                <div key={i} className="flex items-center mb-2 space-x-2">
+                <div key={i} className="flex items-center mb-3 space-x-3">
                   <input
-                    className="flex-grow border border-gray-300 rounded px-3 py-1"
                     type="text"
-                    value={opt}
                     placeholder={`Lựa chọn ${i + 1}`}
+                    value={opt}
                     onChange={(e) => updateOption(idx, i, e.target.value)}
+                    className="flex-grow border border-gray-300 rounded-md px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                   />
                   <button
                     type="button"
-                    className="text-red-500 font-bold"
                     onClick={() => removeOption(idx, i)}
                     disabled={q.options.length === 1}
+                    className={`text-red-600 hover:text-red-800 font-bold text-xl px-2 rounded ${
+                      q.options.length === 1 ? "opacity-40 cursor-not-allowed" : ""
+                    } transition`}
+                    title="Xóa lựa chọn"
                   >
                     &times;
                   </button>
                 </div>
               ))}
+
               <button
                 type="button"
-                className="text-blue-600 mt-2"
                 onClick={() => addOption(idx)}
+                className="mt-2 text-blue-600 hover:text-blue-800 font-semibold transition"
               >
                 + Thêm lựa chọn
               </button>
@@ -247,12 +263,15 @@ const handleSubmit = async () => {
         </div>
       ))}
 
-      <div className="flex items-center space-x-3 mt-4 mb-6">
-        <label className="font-semibold">Loại câu hỏi:</label>
+      <div className="flex items-center space-x-4 mb-8">
+        <label htmlFor="newQuestionType" className="font-semibold text-gray-700">
+          Loại câu hỏi mới:
+        </label>
         <select
-          className="border border-gray-300 rounded px-3 py-1"
+          id="newQuestionType"
           value={newQuestionType}
           onChange={(e) => setNewQuestionType(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         >
           <option value="text">Text</option>
           <option value="radio">Radio</option>
@@ -263,7 +282,7 @@ const handleSubmit = async () => {
         <button
           type="button"
           onClick={addQuestion}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-semibold transition"
         >
           + Thêm câu hỏi
         </button>
@@ -272,14 +291,14 @@ const handleSubmit = async () => {
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full bg-green-600 text-white py-3 rounded font-bold disabled:opacity-50"
+        className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white py-3 rounded-md font-bold transition"
       >
         {loading ? "Đang tạo..." : "Tạo Form"}
       </button>
 
       {formId && (
-        <div className="mt-6 p-4 bg-green-100 border border-green-400 rounded text-center text-green-700">
-          ID Form đã tạo: <span className="font-mono">{formId}</span>
+        <div className="mt-6 p-4 bg-green-100 border border-green-400 rounded text-center text-green-700 font-mono">
+          ID Form đã tạo: {formId}
         </div>
       )}
     </div>
