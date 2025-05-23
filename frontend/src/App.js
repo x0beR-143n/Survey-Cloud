@@ -10,6 +10,8 @@ import MainFooter from './components/home/MainFooter';
 import Footer from './components/layout/Footer';
 import CreateForm from './pages/CreateForm';
 import Results from './pages/Results';
+import FormDetail from './pages/FormDetail';
+import SubmitForm from './pages/SubmitForm';
 
 const Home = () => (
   <>
@@ -31,6 +33,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/create-form" element={<CreateForm />} />
+            <Route path="/form-detail" element={<FormDetail />} />
+            <Route path="/submit-form" element={<SubmitForm />} />
             <Route path="/results" element={<Results />} />
           </Routes>
         </main>
