@@ -33,7 +33,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/create-form" element={<CreateForm />} />
-            <Route path="/form-detail" element={<FormDetail />} />
+            <Route path="/form-detail/:formId" element={<FormDetail />} />
             <Route path="/submit-form" element={<SubmitForm />} />
             <Route path="/results" element={<Results />} />
           </Routes>
