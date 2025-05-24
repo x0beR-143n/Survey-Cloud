@@ -24,7 +24,7 @@ const MainHeader = () => {
               </button>
               <button 
                 className="bg-transparent border-2 border-white text-white font-bold py-3 px-6 rounded-lg hover:bg-white hover:text-blue-600 transition flex items-center justify-center"
-                onClick={() => navigate('/results')}
+                onClick={() => navigate('/view-results')}
               >
                 Xem Kết Quả
                 <ChevronRight className="ml-2 h-5 w-5" />
