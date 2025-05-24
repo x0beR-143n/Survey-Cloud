@@ -12,7 +12,7 @@ const Footer = () => {
               <span className="text-xl font-bold">Nhóm 6</span>
             </div>
             <p className="text-gray-400">
-              hê hê
+              Survey Form
             </p>
           </div>
           

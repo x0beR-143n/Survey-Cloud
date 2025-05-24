@@ -9,9 +9,9 @@ import UserReview from './components/home/UserReview';
 import MainFooter from './components/home/MainFooter';
 import Footer from './components/layout/Footer';
 import CreateForm from './pages/CreateForm';
-import Results from './pages/Results';
 import FormDetail from './pages/FormDetail';
 import SubmitForm from './pages/SubmitForm';
+import ViewFormResults from './pages/ViewFormResults';
 
 const Home = () => (
   <>
@@ -35,7 +35,8 @@ export default function App() {
             <Route path="/create-form" element={<CreateForm />} />
             <Route path="/form-detail/:formId" element={<FormDetail />} />
             <Route path="/submit-form" element={<SubmitForm />} />
-            <Route path="/results" element={<Results />} />
+            <Route path="/view-results" element={<ViewFormResults />} />
+            <Route path="/view-results/:formId" element={<ViewFormResults />} />
           </Routes>
         </main>
         <Footer />
