@@ -123,7 +123,7 @@ const handleSubmit = async () => {
     }
 
     setFormId(result.formId);
-    alert("Tạo form thành công! ID: " + result.formId);
+    // Bỏ alert thành công
   } catch (error) {
     console.error("Lỗi khi tạo form:", error);
     alert("Lỗi: " + error.message);
@@ -132,9 +132,19 @@ const handleSubmit = async () => {
   }
 };
 
+  // Hàm copy link
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Đã copy link vào clipboard!");
+    }).catch(() => {
+      alert("Không thể copy. Vui lòng copy thủ công.");
+    });
+  };
 
-
-
+  // Tạo share link
+  const getShareLink = () => {
+    return `${process.env.REACT_APP_FRONTED_SERVER_URL}/form-detail/${formId}`;
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
@@ -297,8 +307,31 @@ const handleSubmit = async () => {
       </button>
 
       {formId && (
-        <div className="mt-6 p-4 bg-green-100 border border-green-400 rounded text-center text-green-700 font-mono">
-          ID Form đã tạo: {formId}
+        <div className="mt-6 space-y-4">
+          <div className="p-4 bg-green-100 border border-green-400 rounded text-center">
+            <p className="text-green-700 font-semibold mb-2">✅ Tạo form thành công!</p>
+            <p className="text-green-700 font-mono">
+              ID Form: <span className="font-bold">{formId}</span>
+            </p>
+          </div>
+          
+          <div className="p-4 bg-blue-50 border border-blue-300 rounded">
+            <p className="text-blue-700 font-semibold mb-3">🔗 Link chia sẻ form:</p>
+            <div className="flex items-center space-x-3">
+              <input
+                type="text"
+                value={getShareLink()}
+                readOnly
+                className="flex-grow px-3 py-2 bg-white border border-blue-300 rounded font-mono text-sm text-blue-800"
+              />
+              <button
+                onClick={() => copyToClipboard(getShareLink())}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold transition"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
