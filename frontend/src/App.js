@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import MainHeader from './components/home/MainHeader';
 import Features from './components/home/Features';
@@ -33,7 +33,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/create-form" element={<CreateForm />} />
-            <Route path="/form-detail/:formId" element={<FormDetail />} />
+            <Route path="/:formId" element={<FormDetail />} />
             <Route path="/submit-form" element={<SubmitForm />} />
             <Route path="/view-results" element={<ViewFormResults />} />
             <Route path="/view-results/:formId" element={<ViewFormResults />} />

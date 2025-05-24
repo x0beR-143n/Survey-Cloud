@@ -143,7 +143,7 @@ const handleSubmit = async () => {
 
   // Tạo share link
   const getShareLink = () => {
-    return `${process.env.REACT_APP_FRONTED_SERVER_URL}/form-detail/${formId}`;
+    return `${process.env.REACT_APP_FRONTED_SERVER_URL}/${formId}`;
   };
 
   return (
