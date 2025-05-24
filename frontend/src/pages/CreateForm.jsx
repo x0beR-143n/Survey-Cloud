@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 
-
 const questionTypesWithOptions = ["radio", "checkbox", "select"];
 
 export default function CreateForm() {
-  const navigate = useNavigate();
   const [formTitle, setFormTitle] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [questions, setQuestions] = useState([]);
@@ -258,25 +256,12 @@ const handleSubmit = async () => {
                 onClick={() => addOption(idx)}
                 className="mt-2 text-blue-600 hover:text-blue-800 font-semibold transition"
               >
-                <option value="text">Text</option>
-                <option value="radio">Radio</option>
-                <option value="checkbox">Checkbox</option>
-                <option value="select">Select</option>
-                <option value="date">Date</option>
-              </select>
+                + Thêm lựa chọn
+              </button>
             </div>
-
-            <div className="flex items-center mb-3 space-x-2">
-              <input
-                type="checkbox"
-                id={`required-${idx}`}
-                checked={q.required}
-                onChange={(e) => updateQuestion(idx, "required", e.target.checked)}
-              />
-              <label htmlFor={`required-${idx}`} className="font-medium">
-                Bắt buộc trả lời
-              </label>
-            </div>
+          )}
+        </div>
+      ))}
 
       <div className="flex items-center space-x-4 mb-8">
         <label htmlFor="newQuestionType" className="font-semibold text-gray-700">

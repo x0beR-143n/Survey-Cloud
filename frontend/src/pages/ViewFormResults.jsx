@@ -23,7 +23,7 @@ const COLOR_SETS = [
   ['#eb2f96', '#52c41a', '#1890ff', '#722ed1', '#fa8c16'], 
 ];
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+const API_URL = process.env.REACT_APP_BACKEND_SERVER_URL || 'http://localhost:8080';
 
 const ViewFormResults = () => {
   const { formId: urlFormId } = useParams();
@@ -189,7 +189,7 @@ const ViewFormResults = () => {
       <Card className="shadow-lg">
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-2 text-blue-600">Kết quả khảo sát: {form.id}</h2>
-          <p className="text-gray-600">Tiêu đề: {form.title}</p>
+          <p className="text-gray-600">Tổng số lượt trả lời: {form.total_responses}</p>
           {form.description && <p className="text-gray-600">Mô tả: {form.description}</p>}
         </div>
 
