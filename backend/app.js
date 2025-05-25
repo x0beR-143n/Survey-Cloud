@@ -24,7 +24,7 @@ app.get('/health', (req, res) => {
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({ 
-    message: 'Form API Server is running - Survey Platform 2',
+    message: 'Form API Server is running - Survey Platform 1',
     version: '2.0.0',
     timestamp: new Date().toISOString(),
     endpoints: {
@@ -49,16 +49,16 @@ const startServer = async () => {
     console.log('🚀 Starting server initialization...');
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     
-    // Step 1: Initialize database connection
-    console.log('🔄 Step 1: Initializing database connection...');
-    const { initializeDatabase } = require("./models");
+    // Step 1: Initialize database connection with Cloud SQL Connector
+    console.log('🔄 Step 1: Initializing database connection with Cloud SQL Connector...');
+    const { initializeDatabase, closeDatabaseConnection } = require("./models");
     const db = await initializeDatabase();
-    console.log('✅ Database initialized successfully');
+    console.log('✅ Database initialized successfully with Cloud SQL Connector');
     
     // Step 2: Sync database
     console.log('🔄 Step 2: Syncing database schema...');
     await db.sequelize.sync({ force: false, alter: false });
-    console.log("✅ Successfully synced with MySQL DB");
+    console.log("✅ Successfully synced with MySQL DB via Cloud SQL Connector");
     
     // Step 3: Setup routes AFTER database is ready
     console.log('🔄 Step 3: Setting up routes...');
@@ -109,7 +109,7 @@ const startServer = async () => {
     // Step 6: Start server
     const PORT = process.env.PORT || 8080;
     const server = app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🎉 Server is running successfully!`);
+      console.log(`🎉 Server is running successfully with Cloud SQL Connector!`);
       console.log(`📍 Port: ${PORT}`);
       console.log(`🌐 Health check: http://localhost:${PORT}/health`);
       console.log(`🔗 API base URL: http://localhost:${PORT}/forms`);
@@ -122,18 +122,18 @@ const startServer = async () => {
       console.log(`   GET  /forms/get-form-result-by-id/:id`);
     });
 
-    // Graceful shutdown handlers
+    // Graceful shutdown handlers với Cloud SQL Connector cleanup
     const gracefulShutdown = (signal) => {
       console.log(`\n🔄 Received ${signal}, shutting down gracefully...`);
       server.close(async () => {
         console.log('🔒 HTTP server closed');
         try {
-          await db.sequelize.close();
-          console.log('🔒 Database connection closed');
+          // Đóng database connection và Cloud SQL Connector
+          await closeDatabaseConnection();
           console.log('✅ Graceful shutdown completed');
           process.exit(0);
         } catch (error) {
-          console.error('❌ Error closing database connection:', error);
+          console.error('❌ Error during graceful shutdown:', error);
           process.exit(1);
         }
       });
@@ -159,7 +159,7 @@ const startServer = async () => {
 };
 
 // Start the server
-console.log('🔄 Initializing Form API Server...');
+console.log('🔄 Initializing Form API Server with Cloud SQL Connector...');
 startServer().catch(error => {
   console.error('❌ Server startup failed:', error);
   process.exit(1);

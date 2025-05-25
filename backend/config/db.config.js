@@ -1,32 +1,57 @@
+// db.config.js - Fixed for Cloud SQL Connector
 const secretManager = require('./secret-manager');
+const { Connector } = require('@google-cloud/cloud-sql-connector'); 
 
-let dbConfig = null;
+let connectorInstance = null;
 
 const getDbConfig = async () => {
-  if (dbConfig) {
-    return dbConfig;
-  }
-
-  try {   
-      const secrets = await secretManager.getAllSecrets();
-      dbConfig = {
-        HOST: secrets.DB_HOST,
-        USER: secrets.DB_USER,
-        PASSWORD: secrets.DB_PASSWORD,
-        DB: secrets.DB_NAME,
-        dialect: "mysql",
-        pool: {
-          max: 5,
-          min: 0,
-          acquire: 30000,
-          idle: 10000
+    try {
+        const secrets = await secretManager.getAllSecrets();
+        const instanceConnectionName = secrets.INSTANCE_CONNECTION_NAME;
+        
+        // Initialize connector
+        if (!connectorInstance) {
+            connectorInstance = new Connector();
         }
-      };
-    return dbConfig;
-  } catch (error) {
-    console.error('Error getting database configuration:', error);
-    throw error;
-  }
+
+        // Get the MySQL connection options
+        const clientOpts = await connectorInstance.getOptions({
+            instanceConnectionName: instanceConnectionName,
+            ipType: 'PUBLIC', // Change to 'PRIVATE' if needed
+        });
+
+        return {
+            database: secrets.DB_NAME,
+            username: secrets.DB_USER,
+            password: secrets.DB_PASSWORD,
+            dialect: "mysql",
+            dialectOptions: {
+                // Pass the stream directly to dialectOptions
+                stream: clientOpts.stream,
+            },
+            pool: {
+                max: 5,
+                min: 0,
+                acquire: 30000,
+                idle: 10000
+            },
+            logging: process.env.NODE_ENV === 'production' ? false : console.log
+        };
+    } catch (error) {
+        console.error('❌ Error getting database configuration:', error);
+        throw error;
+    }
 };
 
-module.exports = { getDbConfig };
+const closeConnector = async () => {
+    if (connectorInstance) {
+        await connectorInstance.close();
+        connectorInstance = null;
+        console.log('✅ Cloud SQL Connector closed');
+    }
+};
+
+module.exports = { 
+    getDbConfig,
+    closeConnector 
+};

@@ -34,7 +34,7 @@ class SecretManager {
 
   async getAllSecrets() {
     try {
-      const secretNames = ['db-password', 'db-user', 'db-name', 'db-host'];
+      const secretNames = ['db-password', 'db-user', 'db-name', 'db-host', 'connection_name'];
       const secrets = await Promise.all(
         secretNames.map(name => this.getSecret(name))
       );
@@ -44,6 +44,7 @@ class SecretManager {
         DB_USER: secrets[1],
         DB_NAME: secrets[2],
         DB_HOST: secrets[3],
+        INSTANCE_CONNECTION_NAME: secrets[4],
       };
     } catch (error) {
       console.error('Error getting secrets:', error);
