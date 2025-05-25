@@ -1,5 +1,6 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -19,20 +20,20 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Sản phẩm</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="/create" className="hover:text-white transition">Tạo Form</a></li>
-              <li><a href="/manage" className="hover:text-white transition">Quản lý Form</a></li>
-              <li><a href="/templates" className="hover:text-white transition">Templates</a></li>
-              <li><a href="/reports" className="hover:text-white transition">Báo cáo</a></li>
+              <li><Link to="/create-form" className="hover:text-white transition">Tạo Form</Link></li>
+              <li><Link to="/manage" className="hover:text-white transition">Quản lý Form</Link></li>
+              <li><Link to="/templates" className="hover:text-white transition">Templates</Link></li>
+              <li><Link to="/reports" className="hover:text-white transition">Báo cáo</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="text-lg font-bold mb-4">Hỗ trợ</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="/help" className="hover:text-white transition">Trung tâm trợ giúp</a></li>
-              <li><a href="/guide" className="hover:text-white transition">Hướng dẫn sử dụng</a></li>
-              <li><a href="/faq" className="hover:text-white transition">FAQ</a></li>
-              <li><a href="/contact" className="hover:text-white transition">Liên hệ</a></li>
+              <li><Link to="/help" className="hover:text-white transition">Trung tâm trợ giúp</Link></li>
+              <li><Link to="/guide" className="hover:text-white transition">Hướng dẫn sử dụng</Link></li>
+              <li><Link to="/faq" className="hover:text-white transition">FAQ</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition">Liên hệ</Link></li>
             </ul>
           </div>
           
@@ -45,7 +46,6 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        
       </div>
     </footer>
   );

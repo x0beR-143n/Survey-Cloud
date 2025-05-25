@@ -1,14 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
+import { Card, Input, Button, Alert, Select, Space, Typography } from 'antd';
+import { PlusOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
+
+const { TextArea } = Input;
+const { Option } = Select;
+const { Title, Text } = Typography;
 
 const questionTypesWithOptions = ["radio", "checkbox", "select"];
 
 export default function CreateForm() {
+  const location = useLocation();
+  const templateData = location.state?.templateData;
+  
   const [formTitle, setFormTitle] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [questions, setQuestions] = useState([]);
   const [newQuestionType, setNewQuestionType] = useState("text");
   const [formId, setFormId] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    if (templateData) {
+      setFormTitle(templateData.title || "");
+      setFormDescription(templateData.description || "");
+      setQuestions(templateData.questions || []);
+      setFormId(null);
+    }
+  }, [templateData]);
 
   const addQuestion = () => {
     const newQuestion = {
@@ -62,6 +81,13 @@ export default function CreateForm() {
     setQuestions((prev) => prev.filter((_, i) => i !== qIndex));
   };
 
+  const resetForm = () => {
+    setFormTitle("");
+    setFormDescription("");
+    setQuestions([]);
+    setFormId(null);
+  };
+
 const handleSubmit = async () => {
   if (!formTitle.trim()) {
     alert("Vui lòng nhập tên form");
@@ -88,8 +114,6 @@ const handleSubmit = async () => {
 
   const payload = {
     form: {
-      // Nếu backend cần id, bạn có thể dùng uuid hoặc bỏ đi nếu không cần
-      // id: uuidv4(),
       title: formTitle,
       description: formDescription,
     },
@@ -123,7 +147,6 @@ const handleSubmit = async () => {
     }
 
     setFormId(result.formId);
-    // Bỏ alert thành công
   } catch (error) {
     console.error("Lỗi khi tạo form:", error);
     alert("Lỗi: " + error.message);
@@ -132,7 +155,6 @@ const handleSubmit = async () => {
   }
 };
 
-  // Hàm copy link
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
       alert("Đã copy link vào clipboard!");
@@ -141,199 +163,201 @@ const handleSubmit = async () => {
     });
   };
 
-  // Tạo share link
   const getShareLink = () => {
     return `${process.env.REACT_APP_FRONTED_SERVER_URL}/${formId}`;
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800">
-        Tạo Form Mới
-      </h1>
-
-      <div className="mb-6">
-        <label htmlFor="formTitle" className="block mb-2 font-semibold text-gray-700">
-          Tên Form <span className="text-red-500">*</span>
-        </label>
-        <input
-          id="formTitle"
-          type="text"
-          value={formTitle}
-          onChange={(e) => setFormTitle(e.target.value)}
-          placeholder="Nhập tên form"
-          className="w-full border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        />
-      </div>
-
-      <div className="mb-8">
-        <label htmlFor="formDescription" className="block mb-2 font-semibold text-gray-700">
-          Mô tả
-        </label>
-        <textarea
-          id="formDescription"
-          value={formDescription}
-          onChange={(e) => setFormDescription(e.target.value)}
-          placeholder="Nhập mô tả form"
-          rows={4}
-          className="w-full border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        />
-      </div>
-
-      <h2 className="text-3xl font-semibold mb-6 text-gray-800">Câu hỏi</h2>
-
-      {questions.map((q, idx) => (
-        <div
-          key={idx}
-          className="mb-8 border border-gray-300 rounded-lg p-6 bg-gray-50 shadow-sm relative"
-        >
-          <button
-            onClick={() => removeQuestion(idx)}
-            title="Xóa câu hỏi"
-            className="absolute top-4 right-4 text-red-600 hover:text-red-800 transition text-2xl font-bold focus:outline-none"
-          >
-            &times;
-          </button>
-
-          <label className="block mb-3 font-semibold text-gray-700" htmlFor={`question_text_${idx}`}>
-            Câu hỏi {idx + 1} <span className="text-red-500">*</span>
-          </label>
-          <input
-            id={`question_text_${idx}`}
-            type="text"
-            placeholder="Nhập nội dung câu hỏi"
-            value={q.question_text}
-            onChange={(e) => updateQuestion(idx, "question_text", e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-4 py-3 mb-5 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-
-          <div className="flex items-center mb-5 space-x-4">
-            <label htmlFor={`question_type_${idx}`} className="font-semibold text-gray-700">
-              Loại câu hỏi:
-            </label>
-            <select
-              id={`question_type_${idx}`}
-              value={q.question_type}
-              onChange={(e) => {
-                const type = e.target.value;
-                updateQuestion(idx, "question_type", type);
-                if (questionTypesWithOptions.includes(type)) {
-                  if (!q.options.length) updateQuestion(idx, "options", [""]);
-                } else {
-                  updateQuestion(idx, "options", []);
-                }
-              }}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    <div className="max-w-5xl mx-auto p-4">
+      <Card className="border-0 shadow-md">
+        <div className="flex items-center gap-3 mb-6">
+          <FormOutlined className="text-2xl text-blue-500" />
+          <Title level={2} className="!mb-0 !text-gray-800">
+            {templateData ? "Chỉnh sửa Template" : "Tạo Form Mới"}
+          </Title>
+          {templateData && (
+            <Button 
+              type="primary"
+              onClick={resetForm}
+              className="ml-auto bg-blue-500 hover:bg-blue-600 border-none"
+              icon={<FormOutlined />}
             >
-              <option value="text">Text</option>
-              <option value="radio">Radio</option>
-              <option value="checkbox">Checkbox</option>
-              <option value="select">Select</option>
-              <option value="date">Date</option>
-            </select>
-          </div>
-
-          {questionTypesWithOptions.includes(q.question_type) && (
-            <div>
-              <label className="block mb-3 font-semibold text-gray-700">
-                Lựa chọn
-              </label>
-              {q.options.map((opt, i) => (
-                <div key={i} className="flex items-center mb-3 space-x-3">
-                  <input
-                    type="text"
-                    placeholder={`Lựa chọn ${i + 1}`}
-                    value={opt}
-                    onChange={(e) => updateOption(idx, i, e.target.value)}
-                    className="flex-grow border border-gray-300 rounded-md px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeOption(idx, i)}
-                    disabled={q.options.length === 1}
-                    className={`text-red-600 hover:text-red-800 font-bold text-xl px-2 rounded ${
-                      q.options.length === 1 ? "opacity-40 cursor-not-allowed" : ""
-                    } transition`}
-                    title="Xóa lựa chọn"
-                  >
-                    &times;
-                  </button>
-                </div>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => addOption(idx)}
-                className="mt-2 text-blue-600 hover:text-blue-800 font-semibold transition"
-              >
-                + Thêm lựa chọn
-              </button>
-            </div>
+              Tạo form mới
+            </Button>
           )}
         </div>
-      ))}
 
-      <div className="flex items-center space-x-4 mb-8">
-        <label htmlFor="newQuestionType" className="font-semibold text-gray-700">
-          Loại câu hỏi mới:
-        </label>
-        <select
-          id="newQuestionType"
-          value={newQuestionType}
-          onChange={(e) => setNewQuestionType(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        >
-          <option value="text">Text</option>
-          <option value="radio">Radio</option>
-          <option value="checkbox">Checkbox</option>
-          <option value="select">Select</option>
-          <option value="date">Date</option>
-        </select>
-        <button
-          type="button"
-          onClick={addQuestion}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-semibold transition"
-        >
-          + Thêm câu hỏi
-        </button>
-      </div>
-
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white py-3 rounded-md font-bold transition"
-      >
-        {loading ? "Đang tạo..." : "Tạo Form"}
-      </button>
-
-      {formId && (
-        <div className="mt-6 space-y-4">
-          <div className="p-4 bg-green-100 border border-green-400 rounded text-center">
-            <p className="text-green-700 font-semibold mb-2">✅ Tạo form thành công!</p>
-            <p className="text-green-700 font-mono">
-              ID Form: <span className="font-bold">{formId}</span>
-            </p>
+        <Card className="mb-6 border border-gray-100">
+          <div className="mb-4">
+            <Text strong className="block mb-2 text-gray-700">
+              Tên Form <span className="text-red-500">*</span>
+            </Text>
+            <Input
+              value={formTitle}
+              onChange={(e) => setFormTitle(e.target.value)}
+              placeholder="Nhập tên form"
+              size="large"
+            />
           </div>
-          
-          <div className="p-4 bg-blue-50 border border-blue-300 rounded">
-            <p className="text-blue-700 font-semibold mb-3">🔗 Link chia sẻ form:</p>
-            <div className="flex items-center space-x-3">
-              <input
-                type="text"
-                value={getShareLink()}
-                readOnly
-                className="flex-grow px-3 py-2 bg-white border border-blue-300 rounded font-mono text-sm text-blue-800"
+
+          <div>
+            <Text strong className="block mb-2 text-gray-700">
+              Mô tả
+            </Text>
+            <TextArea
+              value={formDescription}
+              onChange={(e) => setFormDescription(e.target.value)}
+              placeholder="Nhập mô tả form"
+              rows={3}
+            />
+          </div>
+        </Card>
+
+        <Title level={3} className="!mb-4 !text-gray-800">Câu hỏi</Title>
+
+        <div className="space-y-4">
+          {questions.map((q, idx) => (
+            <Card 
+              key={idx} 
+              className="border border-gray-100"
+              title={
+                <div className="flex justify-between items-center">
+                  <Text strong>Câu hỏi {idx + 1} <span className="text-red-500">*</span></Text>
+                  <Button
+                    type="text"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => removeQuestion(idx)}
+                  />
+                </div>
+              }
+            >
+              <Input
+                placeholder="Nhập nội dung câu hỏi"
+                value={q.question_text}
+                onChange={(e) => updateQuestion(idx, "question_text", e.target.value)}
+                className="mb-4"
+                size="large"
               />
-              <button
-                onClick={() => copyToClipboard(getShareLink())}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold transition"
-              >
-                Copy
-              </button>
-            </div>
-          </div>
+
+              <div className="flex items-center gap-4 mb-4">
+                <Text strong className="text-gray-700">Loại câu hỏi:</Text>
+                <Select
+                  value={q.question_type}
+                  onChange={(type) => {
+                    updateQuestion(idx, "question_type", type);
+                    if (questionTypesWithOptions.includes(type)) {
+                      if (!q.options.length) updateQuestion(idx, "options", [""]);
+                    } else {
+                      updateQuestion(idx, "options", []);
+                    }
+                  }}
+                  style={{ width: 200 }}
+                >
+                  <Option value="text">Text</Option>
+                  <Option value="radio">Radio</Option>
+                  <Option value="checkbox">Checkbox</Option>
+                  <Option value="select">Select</Option>
+                  <Option value="date">Date</Option>
+                </Select>
+              </div>
+
+              {questionTypesWithOptions.includes(q.question_type) && (
+                <div className="mt-4">
+                  <Text strong className="block mb-3 text-gray-700">Lựa chọn</Text>
+                  <Space direction="vertical" style={{ width: '100%' }}>
+                    {q.options.map((opt, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <Input
+                          placeholder={`Lựa chọn ${i + 1}`}
+                          value={opt}
+                          onChange={(e) => updateOption(idx, i, e.target.value)}
+                          className="flex-grow"
+                        />
+                        <Button
+                          type="text"
+                          danger
+                          icon={<DeleteOutlined />}
+                          onClick={() => removeOption(idx, i)}
+                          disabled={q.options.length === 1}
+                        />
+                      </div>
+                    ))}
+                    <Button
+                      type="dashed"
+                      onClick={() => addOption(idx)}
+                      icon={<PlusOutlined />}
+                      className="w-full"
+                    >
+                      Thêm lựa chọn
+                    </Button>
+                  </Space>
+                </div>
+              )}
+            </Card>
+          ))}
         </div>
-      )}
+
+        <div className="flex items-center gap-4 mt-6 mb-6">
+          <Text strong className="text-gray-700">Loại câu hỏi mới:</Text>
+          <Select
+            value={newQuestionType}
+            onChange={setNewQuestionType}
+            style={{ width: 200 }}
+          >
+            <Option value="text">Text</Option>
+            <Option value="radio">Radio</Option>
+            <Option value="checkbox">Checkbox</Option>
+            <Option value="select">Select</Option>
+            <Option value="date">Date</Option>
+          </Select>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={addQuestion}
+          >
+            Thêm câu hỏi
+          </Button>
+        </div>
+
+        <Button
+          type="primary"
+          size="large"
+          onClick={handleSubmit}
+          loading={loading}
+          className="w-full"
+        >
+          {loading ? "Đang tạo..." : "Tạo Form"}
+        </Button>
+
+        {formId && (
+          <div className="mt-6 space-y-4">
+            <Alert
+              message="✅ Tạo form thành công!"
+              description={`ID Form: ${formId}`}
+              type="success"
+              showIcon
+            />
+            
+            <Card className="bg-blue-50">
+              <Text strong className="block mb-3 text-blue-700">🔗 Link chia sẻ form:</Text>
+              <div className="flex items-center gap-3">
+                <Input
+                  value={getShareLink()}
+                  readOnly
+                  className="flex-grow"
+                />
+                <Button
+                  type="primary"
+                  onClick={() => copyToClipboard(getShareLink())}
+                >
+                  Copy
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
