@@ -1,4 +1,4 @@
-const secretManager = require('../utils/secretManager');
+const secretManager = require('./secret-manager');
 
 let dbConfig = null;
 
@@ -7,11 +7,8 @@ const getDbConfig = async () => {
     return dbConfig;
   }
 
-  try {
-    // Trong môi trường production (Cloud Run), lấy config từ Secret Manager
-    if (process.env.NODE_ENV === 'production' || process.env.GOOGLE_CLOUD_PROJECT) {
+  try {   
       const secrets = await secretManager.getAllSecrets();
-      
       dbConfig = {
         HOST: secrets.DB_HOST,
         USER: secrets.DB_USER,
@@ -25,11 +22,6 @@ const getDbConfig = async () => {
           idle: 10000
         }
       };
-    } else {
-      // Trong môi trường development, sử dụng config cố định
-      console.log("Development");
-    }
-    
     return dbConfig;
   } catch (error) {
     console.error('Error getting database configuration:', error);

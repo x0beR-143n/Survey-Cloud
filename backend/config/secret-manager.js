@@ -3,7 +3,7 @@ const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
 class SecretManager {
   constructor() {
     this.client = new SecretManagerServiceClient();
-    this.projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.PROJECT_ID;
+    this.projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.PROJECT_ID || "surveyplatformproject";
     this.cachedSecrets = new Map();
   }
 
