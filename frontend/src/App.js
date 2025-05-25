@@ -13,6 +13,8 @@ import FormDetail from './pages/FormDetail';
 import SubmitForm from './pages/SubmitForm';
 import ViewFormResults from './pages/ViewFormResults';
 import TemplatesPage from './pages/Templates';
+import Review from './pages/Review';
+import AllFeatures from './pages/AllFeatures';
 
 const Home = () => (
   <>
@@ -39,6 +41,8 @@ export default function App() {
             <Route path="/view-results" element={<ViewFormResults />} />
             <Route path="/view-results/:formId" element={<ViewFormResults />} />
             <Route path="/templates" element={<TemplatesPage />} />
+            <Route path="/review" element={<Review />} />
+            <Route path="/features" element={<AllFeatures />} />
           </Routes>
         </main>
         <Footer />

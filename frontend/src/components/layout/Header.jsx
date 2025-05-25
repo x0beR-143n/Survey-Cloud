@@ -12,7 +12,6 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md py-4 px-6 sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
-        {/* Logo section - left */}
         <div className="w-1/4">
           <Link to="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
             <FileText className="h-8 w-8 text-blue-600" />
@@ -20,7 +19,6 @@ const Header = () => {
           </Link>
         </div>
         
-        {/* Navigation section - center */}
         <nav className="w-2/4 flex justify-center">
           <div className="inline-flex space-x-4">
             <Link
@@ -42,17 +40,15 @@ const Header = () => {
               Tính năng
             </Link>
             <Link
-              to="/testimonials"
-              className={`px-6 py-2 rounded-md font-bold transition-colors duration-200 ${isActive('/testimonials')}`}
+              to="/review"
+              className={`px-6 py-2 rounded-md font-bold transition-colors duration-200 ${isActive('/review')}`}
             >
               Đánh giá
             </Link>
           </div>
         </nav>
         
-        {/* Right section - for future use */}
         <div className="w-1/4 flex justify-end">
-          {/* Có thể thêm các nút như Login/Sign up ở đây sau này */}
         </div>
       </div>
     </header>
