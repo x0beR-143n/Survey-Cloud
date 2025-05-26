@@ -19,6 +19,10 @@ const UserReview = () => {
       {
         name: "Bùi Minh Nhật",
         text: "22028262",
+      },
+      {
+        name: "Nguyễn Anh Vũ",
+        text: "22028068",
       }
     ];
   
