@@ -15,7 +15,7 @@ const Header = () => {
         <div className="w-1/4">
           <Link to="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
             <FileText className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-blue-600">Form Survey</span>
+            <span className="text-2xl font-bold text-blue-600">3SFrom</span>
           </Link>
         </div>
         

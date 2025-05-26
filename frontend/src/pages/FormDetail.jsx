@@ -155,9 +155,54 @@ const FormDetail = () => {
             ))}
           </div>
         );
+      
+      case 'select':
+      return (
+        <div className="relative">
+          <select
+            value={answers[question.id] || ''}
+            onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+            className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm hover:bg-white hover:shadow-sm cursor-pointer appearance-none pr-12"
+          >
+            <option value="" disabled>
+              Chọn một tùy chọn...
+            </option>
+            {question.options?.map((option) => (
+              <option key={option.id} value={option.option_text}>
+                {option.option_text}
+              </option>
+            ))}
+          </select>
+          {/* Custom dropdown arrow */}
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+      );
 
-      default:
-        return <div className="text-red-500">Loại câu hỏi không được hỗ trợ</div>;
+    case 'date':
+      return (
+        <div className="relative">
+          <input
+            type="date"
+            value={answers[question.id] || ''}
+            onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+            className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-3 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm hover:bg-white hover:shadow-sm cursor-pointer"
+          />
+          {/* Custom calendar icon */}
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+        </div>
+      );
+
+    default:
+      return <div className="text-red-500">Loại câu hỏi không được hỗ trợ</div>;  
+  
     }
   };
 
