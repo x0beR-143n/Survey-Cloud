@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "http://bucket-survey.storage.googleapis.com",
+  "homepage": "https://sform-638e9.web.app",
   "private": true,
   "dependencies": {
     "@radix-ui/react-progress": "^1.1.4",
